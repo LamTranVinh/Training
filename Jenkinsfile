@@ -16,6 +16,7 @@ pipeline {
          stage("Deploy"){
             steps {
                 sh "docker-compose build"
+                sh "docker run -d -p 80:80 vinh6"
             }
         }
 
