@@ -7,10 +7,18 @@ pipeline {
             }
         }
 
-        stage("Deploy"){
+        // stage("Deploy"){
+        //     steps {
+        //         sh "docker-compose build"
+        //     }
+        // }
+
+        stage("Build-image"){
             steps {
-                sh "docker-compose build"
+                sh "docker build -t vinh ."
             }
         }
+
+        
     }
 }
