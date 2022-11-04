@@ -15,7 +15,7 @@ pipeline {
 
         stage("Build-image"){
             steps {
-                sh "sudo docker build -t -S vinh3 ."
+                sh "sudo docker build -t -S vinh4 ."
             }
         }
 
