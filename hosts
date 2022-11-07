@@ -1,2 +1,1 @@
-[server]
-100.25.111.197 ansible_user="ubuntu" ansible_ssh_extra_args='-o StrictHostKeyChecking=no'
+server ansible_host=100.25.111.197 ansible_user=ubuntu ansible_ssh_extra_args='-o StrictHostKeyChecking=no'
