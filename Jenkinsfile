@@ -15,17 +15,17 @@ pipeline {
             steps {
                 sh '''
                     docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} . 
-                    docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest
+                    docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:test
                     docker image ls | grep ${DOCKER_IMAGE}'''
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credential', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh 'echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin'
                     sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                    sh "docker push ${DOCKER_IMAGE}:latest"
+                    sh "docker push ${DOCKER_IMAGE}:test"
                 }
 
                 //clean to save disk
                 sh "docker image rm ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                sh "docker image rm ${DOCKER_IMAGE}:latest"
+                sh "docker image rm ${DOCKER_IMAGE}:test"
             }
         }
         stage("Deploy1"){
