@@ -2,7 +2,7 @@
 pipeline {
     agent any
     environment{
-        DOCKER_IMAGE          = "lamtranvinh/nginx"
+        DOCKER_IMAGE = "lamtranvinh/nginx"
     }
     stages {
         stage("Build"){
@@ -25,7 +25,7 @@ pipeline {
 
                 //clean to save disk
                 sh "docker image rm ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                sh "docker image rm ${DOCKER_IMAGE}:test"
+                sh "docker image rm ${DOCKER_IMAGE}:latest"
             }
         }
         stage("Deploy1"){
