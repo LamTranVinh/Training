@@ -28,7 +28,7 @@ pipeline {
                 sh "docker image rm ${DOCKER_IMAGE}:latest"
             }
         }
-        stage("Deploy"){
+        stage("Deploy1"){
             options {
                 timeout(time: 10, unit: 'MINUTES')
             }
