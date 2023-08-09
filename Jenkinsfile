@@ -28,27 +28,28 @@ pipeline {
                 sh "docker image rm -f ${DOCKER_IMAGE}:latest"
             }
         }
-        stage("Deploy1"){
+        stage("Deploy1") {
             options {
                 timeout(time: 10, unit: 'MINUTES')
             }
             steps {
-               withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    ansiblePlaybook(
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         def dockerPassword = credentials('dockerhub')
-                        credentialsId: 'ssh-ec2',
-                        playbook: 'playbook.yml',
-                        inventory: 'hosts',
-                        become: 'yes',
-                        extraVars: [
-                          docker_password: dockerPassword
-                        ]
-                    )
+                        ansiblePlaybook(
+                            credentialsId: 'ssh-ec2',
+                            playbook: 'playbook.yml',
+                            inventory: 'hosts',
+                            become: 'yes',
+                            extraVars: [
+                                docker_password: dockerPassword
+                            ]
+                        )
+                    }
                 }
-                
             }
         }
-    }
+}
     post {
         success {
             echo "SUCCESSFULL"
