@@ -2,7 +2,5 @@ version: "2.1"
 services:
   app:
     image: lamtranvinh/nginx:latest
-    context: .
-    build: ./Dockerfile
     ports:
       - "8000:80"
