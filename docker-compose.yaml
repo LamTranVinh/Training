@@ -1,6 +1,6 @@
 version: "2.1"
 services:
   app:
-    image: lamtranvinh/nginx:latest
+    image: tuyetnhung/happy:latest
     ports:
       - "8000:80"
