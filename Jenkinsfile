@@ -33,7 +33,7 @@ pipeline {
                 timeout(time: 10, unit: 'MINUTES')
             }
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: $DOCKER_USERNAME, passwordVariable: $DOCKER_PASSWORD)]) {
                     ansiblePlaybook(
                         credentialsId: 'ssh-ec2',
                         playbook: 'playbook.yml',
