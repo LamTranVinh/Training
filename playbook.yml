@@ -3,33 +3,9 @@
   remote_user: ubuntu
   become: yes
   tasks:
-    # - name: Generate SSH Key Pair
-    #   shell: ssh-keygen -t rsa -b 4096 -f /home/ec2-user/mykey
-    #   args:
-    #     executable: /bin/bash
-    #   register: keygen_result
-    # - name: Show Public Key
-    #   debug:
-    #     var: keygen_result.stdout
-    # - name: Install Docker
-    #   apt:
-    #     name:
-    #       - docker-ce
-    #       - docker-compose
-    #     state: present
-    # - name: Login DockerHub
-    #   shell: docker login -u "{{DOCKER_USERNAME}}" -p "{{DOCKER_PASSWORD}}"
-    # - name: Copy file
-    #   copy:
-    #     src: docker-compose.yaml
-    #     dest: /home/ubuntu/
-    # - name: Restart docker-compose
-    #   shell: |
-    #       docker-compose stop
-    #       docker-compose rm -f
-    #       docker-compose pull
-    #       docker-compose up -d
-    
+    - name: Set Docker Image Environment Variable
+      set_fact:
+        docker_image: "nginx:latest"
     - name: Update apt cache
       become: yes
       apt:
@@ -76,13 +52,12 @@
 
     - name: Pull Docker Image
       become: yes
-      shell: docker pull tuyetnhung/happy:latest
-      register: docker_pull_result
+      command: docker pull {{ docker_image }}
 
     - name: Run Docker Container
       become: yes
       shell: docker run -d --name my_nginx_container -p 8080:80 tuyetnhung/happy:latest
-      # when: docker_pull_result|success
+
 
 
 
