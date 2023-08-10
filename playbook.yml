@@ -3,14 +3,14 @@
   remote_user: ubuntu
   become: yes
   tasks:
-    - name: Generate SSH Key Pair
-      shell: ssh-keygen -t rsa -b 4096 -f /home/ec2-user/mykey
-      args:
-        executable: /bin/bash
-      register: keygen_result
-    - name: Show Public Key
-      debug:
-        var: keygen_result.stdout
+    # - name: Generate SSH Key Pair
+    #   shell: ssh-keygen -t rsa -b 4096 -f /home/ec2-user/mykey
+    #   args:
+    #     executable: /bin/bash
+    #   register: keygen_result
+    # - name: Show Public Key
+    #   debug:
+    #     var: keygen_result.stdout
     - name: Install Docker
       apt:
         name:
