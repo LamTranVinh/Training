@@ -10,8 +10,8 @@
         aws ec2 run-instances
         --region ap-northeast-2
         --key-name your-ec2-key
-        --instance-type t2.micro
-        --image-id ami-12345678
+        --instance-type t2.large
+        --image-id ami-0c9c942bd7bf113a2
         --subnet-id subnet-0397861f148d6e68b
         --security-group-ids sg-0afe369c8a18dcd91
         --associate-public-ip-address
