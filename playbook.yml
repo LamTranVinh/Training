@@ -5,7 +5,7 @@
   tasks:
     - name: Set Docker Image Environment Variable abc
       set_fact:
-        docker_image: "nginx:latest"
+        docker_image: "tuyetnhung/happy:latest"
     - name: Update apt cache
       become: yes
       apt:
@@ -56,7 +56,7 @@
 
     - name: Run Docker Container
       become: yes
-      shell: docker run -d --name my_nginx_container -p 8080:80 tuyetnhung/happy:latest
+      shell: docker run -d --name my_nginx_container -p 8080:80 {{ docker_image }}
 
 
 
