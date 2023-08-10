@@ -3,7 +3,7 @@
   remote_user: ubuntu
   become: yes
   tasks:
-    - name: Set Docker Image Environment Variable
+    - name: Set Docker Image Environment Variable abc
       set_fact:
         docker_image: "nginx:latest"
     - name: Update apt cache
