@@ -11,12 +11,70 @@
     # - name: Show Public Key
     #   debug:
     #     var: keygen_result.stdout
-    - name: Install Docker
+    # - name: Install Docker
+    #   apt:
+    #     name:
+    #       - docker-ce
+    #       - docker-compose
+    #     state: present
+    # - name: Login DockerHub
+    #   shell: docker login -u "{{DOCKER_USERNAME}}" -p "{{DOCKER_PASSWORD}}"
+    # - name: Copy file
+    #   copy:
+    #     src: docker-compose.yaml
+    #     dest: /home/ubuntu/
+    # - name: Restart docker-compose
+    #   shell: |
+    #       docker-compose stop
+    #       docker-compose rm -f
+    #       docker-compose pull
+    #       docker-compose up -d
+    
+    - name: Update apt cache
+      become: yes
       apt:
-        name:
-          - docker-ce
-          - docker-compose
+        update_cache: yes
+    - name: Install required packages
+      become: yes
+      apt:
+        name: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common']    
+    - name: Add Docker GPG key
+      become: yes
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+
+    - name: Add Docker repository
+      become: yes
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu hirsute stable
+
+    - name: Install Docker
+      become: yes
+      apt:
+        name: docker-ce
         state: present
+
+    - name: Start and enable Docker service
+      become: yes
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+
+    - name: Install Docker Compose
+      become: yes
+      shell: curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+      args:
+        creates: /usr/local/bin/docker-compose
+      register: docker_compose_result
+
+    - name: Set Docker Compose permissions
+      become: yes
+      file:
+        path: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'
+      when: docker_compose_result|success
+
     - name: Login DockerHub
       shell: docker login -u "{{DOCKER_USERNAME}}" -p "{{DOCKER_PASSWORD}}"
     - name: Copy file
@@ -29,5 +87,9 @@
           docker-compose rm -f
           docker-compose pull
           docker-compose up -d
+
+
+
+    
 ...
   
