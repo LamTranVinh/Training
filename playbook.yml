@@ -21,7 +21,7 @@
         count: 1
         tags:
           Name: "My-new-EC2-Instance"
-    register: ec2_instance
+      register: ec2_instance
 
 
     # - name: Display EC2 Instance Information
