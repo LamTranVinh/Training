@@ -1,5 +1,4 @@
 ---
----
 - hosts: server
   remote_user: ubuntu
   become: yes
