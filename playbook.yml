@@ -1,10 +1,11 @@
 ---
-- hosts: server
+- name: Create EC2 Instance
+  hosts: server
   remote_user: ubuntu
   become: yes
   gather_facts: false
   tasks:
-    - name: Create EC2 Instance L6
+  - name: Create EC2 Instance L6
       ec2:
         aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
         aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
