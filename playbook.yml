@@ -73,7 +73,7 @@
       file:
         path: /usr/local/bin/docker-compose
         mode: 'u+x,g+x'
-      when: docker_compose_result|success
+      # when: docker_compose_result|success
 
     - name: Login DockerHub
       shell: docker login -u "{{DOCKER_USERNAME}}" -p "{{DOCKER_PASSWORD}}"
