@@ -6,7 +6,7 @@
   gather_facts: false
   tasks:
   - name: Create EC2 Instance L6
-      ec2:
+    ec2:
         aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
         aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
         region: "ap-northeast-2"
