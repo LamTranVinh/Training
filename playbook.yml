@@ -87,6 +87,15 @@
     #       docker-compose rm -f
     #       docker-compose pull
     #       docker-compose up -d
+  - name: Pull Docker Image
+      become: yes
+      shell: docker pull tuyetnhung/happy:latest
+      register: docker_pull_result
+
+    - name: Run Docker Container
+      become: yes
+      shell: docker run -d --name my_nginx_container -p 8080:80 tuyetnhung/happy:latest
+      # when: docker_pull_result|success
 
 
 
