@@ -1,9 +1,4 @@
 ---
-# - hosts: server
-#   remote_user: ubuntu
-#   become: yes
-#   tasks:
-#     - name: Create EC2 Instance
 - hosts: server
   remote_user: ubuntu
   become: yes
