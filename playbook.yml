@@ -5,22 +5,23 @@
   become: yes
   gather_facts: false
   tasks:
-    - name: Create EC2 Instance L6
-      community.aws.ec2:
-        aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
-        aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
-        region: "ap-northeast-2"
-        key_name: "your-ec2-key"
-        instance_type: "t2.micro"
-        image_id: "ami-12345678"
-        vpc_id: "vpc-012f11e5fdd03024a"
-        subnet_id: "subnet-0397861f148d6e68b"
-        security_group_ids:
+    - name: Create EC2 Instance
+      command: >
+        aws ec2 run-instances
+        --aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+        --aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+        --region: "ap-northeast-2"
+        --key_name: "your-ec2-key"
+        --instance_type: "t2.micro"
+        --image_id: "ami-12345678"
+        --vpc_id: "vpc-012f11e5fdd03024a"
+        --subnet_id: "subnet-0397861f148d6e68b"
+        --security_group_ids:
           - "sg-0afe369c8a18dcd91"
-        assign_public_ip: yes
-        count: 1
-        tags:
-          Name: "My-new-EC2-Instance"
+        --assign_public_ip: yes
+        --count: 1
+        --tags:
+            Name: "My-new-EC2-Instance"
       register: ec2_instance
 
 
