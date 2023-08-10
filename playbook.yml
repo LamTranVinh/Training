@@ -9,7 +9,7 @@
       command: >
         aws ec2 run-instances
         --region ap-northeast-2
-        --key-name your-ec2-key
+        --key-name new-key-pem.pem
         --instance-type t2.large
         --image-id ami-0c9c942bd7bf113a2
         --subnet-id subnet-0397861f148d6e68b
