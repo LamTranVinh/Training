@@ -73,21 +73,8 @@
       file:
         path: /usr/local/bin/docker-compose
         mode: 'u+x,g+x'
-      # when: docker_compose_result|success
 
-    # - name: Login DockerHub
-    #   shell: docker login -u "{{DOCKER_USERNAME}}" -p "{{DOCKER_PASSWORD}}"
-    # - name: Copy file
-    #   copy:
-    #     src: docker-compose.yaml
-    #     dest: /home/ubuntu/
-    # - name: Restart docker-compose
-    #   shell: |
-    #       docker-compose stop
-    #       docker-compose rm -f
-    #       docker-compose pull
-    #       docker-compose up -d
-  - name: Pull Docker Image
+    - name: Pull Docker Image
       become: yes
       shell: docker pull tuyetnhung/happy:latest
       register: docker_pull_result
