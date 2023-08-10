@@ -1,62 +1,90 @@
 ---
-- hosts: server
+# - hosts: server
+#   remote_user: ubuntu
+#   become: yes
+#   tasks:
+#     - name: Create EC2 Instance
+- hosts: localhost
   remote_user: ubuntu
   become: yes
+  gather_facts: false
   tasks:
-    - name: Set Docker Image Environment Variable abc
-      set_fact:
-        docker_image: "tuyetnhung/happy:latest"
-    - name: Update apt cache
-      become: yes
-      apt:
-        update_cache: yes
-    - name: Install required packages
-      become: yes
-      apt:
-        name: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common']    
-    - name: Add Docker GPG key
-      become: yes
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
+    - name: Create EC2 Instance
+      community.aws.ec2:
+        aws_access_key: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+        aws_secret_key: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+        region: "ap-northeast-2"
+        key_name: "your-ec2-key"
+        instance_type: "t2.micro"
+        image_id: "ami-12345678"
+        vpc_id: "vpc-012f11e5fdd03024a"
+        subnet_id: "subnet-0397861f148d6e68b"
+        security_group_ids:
+          - "sg-0afe369c8a18dcd91"
+        assign_public_ip: yes
+        count: 1
+        tags:
+          Name: "My-new-EC2-Instance"
+      register: ec2_instance
 
-    - name: Add Docker repository
-      become: yes
-      apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu hirsute stable
+    # - name: Display EC2 Instance Information
+    #   ansible.builtin.debug:
+    #     var: ec2_instance.instances
 
-    - name: Install Docker
-      become: yes
-      apt:
-        name: docker-ce
-        state: present
+    # - name: Set Docker Image Environment Variable abc
+    #   set_fact:
+    #     docker_image: "tuyetnhung/happy:latest"
+    # - name: Update apt cache
+    #   become: yes
+    #   apt:
+    #     update_cache: yes
+    # - name: Install required packages
+    #   become: yes
+    #   apt:
+    #     name: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common']    
+    # - name: Add Docker GPG key
+    #   become: yes
+    #   apt_key:
+    #     url: https://download.docker.com/linux/ubuntu/gpg
 
-    - name: Start and enable Docker service
-      become: yes
-      systemd:
-        name: docker
-        enabled: yes
-        state: started
+    # - name: Add Docker repository
+    #   become: yes
+    #   apt_repository:
+    #     repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu hirsute stable
 
-    - name: Install Docker Compose
-      become: yes
-      shell: curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-      args:
-        creates: /usr/local/bin/docker-compose
-      register: docker_compose_result
+    # - name: Install Docker
+    #   become: yes
+    #   apt:
+    #     name: docker-ce
+    #     state: present
 
-    - name: Set Docker Compose permissions
-      become: yes
-      file:
-        path: /usr/local/bin/docker-compose
-        mode: 'u+x,g+x'
+    # - name: Start and enable Docker service
+    #   become: yes
+    #   systemd:
+    #     name: docker
+    #     enabled: yes
+    #     state: started
 
-    - name: Pull Docker Image
-      become: yes
-      command: docker pull {{ docker_image }}
+    # - name: Install Docker Compose
+    #   become: yes
+    #   shell: curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    #   args:
+    #     creates: /usr/local/bin/docker-compose
+    #   register: docker_compose_result
 
-    - name: Run a new Docker Container 
-      become: yes
-      shell: docker run -d --name my_nginx_container -p 8080:80 {{ docker_image }}
+    # - name: Set Docker Compose permissions
+    #   become: yes
+    #   file:
+    #     path: /usr/local/bin/docker-compose
+    #     mode: 'u+x,g+x'
+
+    # - name: Pull Docker Image
+    #   become: yes
+    #   command: docker pull {{ docker_image }}
+
+    # - name: Run a new Docker Container 
+    #   become: yes
+    #   shell: docker run -d --name my_nginx_container -p 8080:80 {{ docker_image }}
 
 
 
