@@ -18,6 +18,26 @@
         --count 1
         --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=My-new-EC2-Instance}]"
       register: ec2_instance
+      
+    - name: Wait for SSH Connectivity
+      ansible.builtin.wait_for:
+        host: "{{ ec2_instance['instances'][0]['public_dns_name'] }}"
+        port: 22
+        delay: 10
+        timeout: 300
+      become: no
+
+    - name: Run Command on EC2 Instance
+      ansible.builtin.command: uptime
+      args:
+        ssh_executable: ssh
+        _uses_shell: yes
+      register: uptime_output
+
+    - name: Display Uptime Output
+      debug:
+        var: uptime_output.stdout_lines
+        
     # - name: Display EC2 Instance Information
     #   ansible.builtin.debug:
     #     var: ec2_instance.instances
