@@ -40,12 +40,13 @@
         var: item
       loop: "{{ ec2_instance.instances }}"
       
-    # - name: Add instance to known hosts
-    #   known_hosts:
-    #     path: "/home/ubuntu/.ssh/known_hosts"
-    #     name: "{{ item.public_dns_name }}"
-    #     kekey: "{{ item.ssh_host_key_public }}"
-    #   with_items: "{{ ec2_instance.instances }}"
+    - name: Add instance to known hosts
+      known_hosts:
+        path: "~/.ssh/known_hosts"
+        name: "{{ item.public_dns_name }}"
+        key: "{{ item.key_name }}"
+      with_items: "{{ ec2_instance.instances }}"
+      when: item.public_ip_address is defined
       
     # - name: Update Jenkins SSH configuration
     #   lineinfile:
