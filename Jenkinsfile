@@ -38,6 +38,7 @@ pipeline {
                         def dockerPassword = credentials('dockerhub')
                         ansiblePlaybook(
                             credentialsId: 'ssh-ec2',
+                            credentialsId: 'ssh-ubuntu',
                             playbook: 'playbook.yml',
                             inventory: 'hosts',
                             become: 'yes',
