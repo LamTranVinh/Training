@@ -29,12 +29,12 @@
       
     - name: Wait for SSH to be available
       wait_for:
-        host: "{{ item.public_ip }}"
+        host: "{{ item.public_ip_address }}"
         port: 22
         delay: 30
         timeout: 300
       with_items: "{{ ec2_instance.instances }}"
-
+      
     - name: Add instance to known hosts
       known_hosts:
         path: "~/.ssh/known_hosts"
