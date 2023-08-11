@@ -9,7 +9,7 @@
       command: >
         aws ec2 run-instances
         --region ap-northeast-2
-        --key-name new-key-pem
+        --key-name ssh-key-pem-ansible-playbook
         --instance-type t2.micro
         --image-id ami-0c9c942bd7bf113a2
         --subnet-id subnet-0397861f148d6e68b
@@ -38,7 +38,7 @@
     #     # delegate_to: localhost
   
     - name: SSH into EC2 Instance
-      ansible.builtin.raw: ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/workspace/jenkins-trigger-github/new-key-pem.pem ubuntu@{{ ec2_instance.stdout | from_json | json_query('Instances[0].PublicDnsName') }}
+      ansible.builtin.raw: ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/workspace/jenkins-trigger-github/ssh-key-pem-ansible-playbook.pem ubuntu@{{ ec2_instance.stdout | from_json | json_query('Instances[0].PublicDnsName') }}
       delegate_to: server
       become: yes
       
