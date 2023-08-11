@@ -24,7 +24,8 @@
         var: ec2_instance
 
     - name: Wait for SSH Connectivity
-      ansible.builtin.wait_for:
+      delegate_to: localhost
+      wait_for_connection:
         host: "{{ ec2_instance['stdout'] | from_json | json_query('Instances[0].PublicDnsName') }}"
         port: 22
         delay: 10
