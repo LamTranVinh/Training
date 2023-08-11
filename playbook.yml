@@ -18,7 +18,8 @@
         --count 1
         --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=My-new-EC2-Instance}]"
       register: ec2_instance
-        - name: Debug ec2_instance Variable
+      
+    - name: Debug ec2_instance Variable
       debug:
         var: ec2_instance
 
