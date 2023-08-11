@@ -34,13 +34,13 @@
     #     delay: 30
     #     timeout: 300
     #   with_items: "{{ ec2_instance.instances }}"
-
-    - name: Add instance public keys to known hosts
-      ansible.builtin.ssh_known_hosts:
-        path: "~/.ssh/known_hosts"
-        name: "{{ item.public_dns_name }}"  # Use the instance's public DNS name
-      loop: "{{ ec2_instance.instances }}"
       
+    - name: Add instance public keys to known hosts
+      known_hosts:
+        path: "~/.ssh/known_hosts"
+        name: "{{ item.public_dns_name }}"
+        key: "{{ item.key_name }}"
+      loop: "{{ ec2_instance.instances }}"
     # - name: Debug instance details
     #   debug:
     #     var: item
