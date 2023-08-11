@@ -24,7 +24,7 @@
         var: ec2_instance
 
     - name: Wait for SSH Connectivity
-      delegate_to: localhost
+      delegate_to: server
       wait_for_connection:
         host: "{{ ec2_instance['stdout'] | from_json | json_query('Instances[0].PublicDnsName') }}"
         port: 22
