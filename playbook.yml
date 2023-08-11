@@ -10,8 +10,9 @@
         aws ec2 run-instances
         --region ap-northeast-2
         --key-name new-key-pem
-        --instance-type t2.large
+        --instance-type t2.micro
         --image-id ami-0c9c942bd7bf113a2
+        --vpc-id vpc-012f11e5fdd03024a
         --subnet-id subnet-0397861f148d6e68b
         --security-group-ids sg-0afe369c8a18dcd91
         --associate-public-ip-address
