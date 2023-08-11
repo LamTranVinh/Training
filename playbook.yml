@@ -27,13 +27,13 @@
           Name: "Jenkins-Instance"
       register: ec2_instance
     
-    - name: Wait for SSH to be available
-      wait_for:
-        host: "{{ item.public_ip_address }}"
-        port: 22
-        delay: 30
-        timeout: 300
-      with_items: "{{ ec2_instance.instances }}"
+    # - name: Wait for SSH to be available
+    #   wait_for:
+    #     host: "{{ item.public_ip_address }}"
+    #     port: 22
+    #     delay: 30
+    #     timeout: 300
+    #   with_items: "{{ ec2_instance.instances }}"
 
     - name: Add instance public keys to known hosts
       ansible.builtin.ssh_known_hosts:
