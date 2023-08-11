@@ -26,7 +26,7 @@
         tags:
           Name: "Jenkins-Instance"
       register: ec2_instance
-      
+    
     - name: Wait for SSH to be available
       wait_for:
         host: "{{ item.public_ip_address }}"
