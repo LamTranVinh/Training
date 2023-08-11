@@ -22,60 +22,60 @@
     #   ansible.builtin.debug:
     #     var: ec2_instance.instances
 
-    - name: Set Docker Image Environment Variable abc
-      set_fact:
-        docker_image: "tuyetnhung/happy:latest"
-    - name: Update apt cache
-      become: yes
-      apt:
-        update_cache: yes
-    - name: Install required packages
-      become: yes
-      apt:
-        name: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common']    
-    - name: Add Docker GPG key
-      become: yes
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
+    # - name: Set Docker Image Environment Variable abc
+    #   set_fact:
+    #     docker_image: "tuyetnhung/happy:latest"
+    # - name: Update apt cache
+    #   become: yes
+    #   apt:
+    #     update_cache: yes
+    # - name: Install required packages
+    #   become: yes
+    #   apt:
+    #     name: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common']    
+    # - name: Add Docker GPG key
+    #   become: yes
+    #   apt_key:
+    #     url: https://download.docker.com/linux/ubuntu/gpg
 
-    - name: Add Docker repository
-      become: yes
-      apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu hirsute stable
+    # - name: Add Docker repository
+    #   become: yes
+    #   apt_repository:
+    #     repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu hirsute stable
 
-    - name: Install Docker
-      become: yes
-      apt:
-        name: docker-ce
-        state: present
+    # - name: Install Docker
+    #   become: yes
+    #   apt:
+    #     name: docker-ce
+    #     state: present
 
-    - name: Start and enable Docker service
-      become: yes
-      systemd:
-        name: docker
-        enabled: yes
-        state: started
+    # - name: Start and enable Docker service
+    #   become: yes
+    #   systemd:
+    #     name: docker
+    #     enabled: yes
+    #     state: started
 
-    - name: Install Docker Compose
-      become: yes
-      shell: curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-      args:
-        creates: /usr/local/bin/docker-compose
-      register: docker_compose_result
+    # - name: Install Docker Compose
+    #   become: yes
+    #   shell: curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    #   args:
+    #     creates: /usr/local/bin/docker-compose
+    #   register: docker_compose_result
 
-    - name: Set Docker Compose permissions
-      become: yes
-      file:
-        path: /usr/local/bin/docker-compose
-        mode: 'u+x,g+x'
+    # - name: Set Docker Compose permissions
+    #   become: yes
+    #   file:
+    #     path: /usr/local/bin/docker-compose
+    #     mode: 'u+x,g+x'
 
-    - name: Pull Docker Image
-      become: yes
-      command: docker pull {{ docker_image }}
+    # - name: Pull Docker Image
+    #   become: yes
+    #   command: docker pull {{ docker_image }}
 
-    - name: Run a new Docker Container 
-      become: yes
-      shell: docker run -d --name my_nginx_container -p 8080:80 {{ docker_image }}
+    # - name: Run a new Docker Container 
+    #   become: yes
+    #   shell: docker run -d --name my_nginx_container -p 8080:80 {{ docker_image }}
 
 
 
