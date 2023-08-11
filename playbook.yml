@@ -12,20 +12,20 @@
     security_group: "sg-0afe369c8a18dcd91"
     subnet_id: "subnet-0397861f148d6e68b"
   tasks:
-  - name: Create EC2 instance
-    amazon.aws.ec2_instance:
-      region: "{{ region }}"
-      instance_type: "{{ instance_type }}"
-      image_id: "{{ ami_id }}"
-      key_name: "{{ keypair_name }}"
-      security_groups: ["{{ security_group }}"]
-      subnet_id: "{{ subnet_id }}"
-      network:
-        assign_public_ip: yes
-      count: 1
-      tags:
-        Name: "Jenkins-Instance"
-    register: ec2_instance
+    - name: Create EC2 instance
+      amazon.aws.ec2_instance:
+        region: "{{ region }}"
+        instance_type: "{{ instance_type }}"
+        image_id: "{{ ami_id }}"
+        key_name: "{{ keypair_name }}"
+        security_groups: ["{{ security_group }}"]
+        subnet_id: "{{ subnet_id }}"
+        network:
+          assign_public_ip: yes
+        count: 1
+        tags:
+          Name: "Jenkins-Instance"
+      register: ec2_instance
       
     - name: Wait for SSH to be available
       wait_for:
