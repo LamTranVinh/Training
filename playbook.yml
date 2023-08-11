@@ -31,12 +31,16 @@
         timeout: 600
       become: no
 
-    - name: Run Command on EC2 Instance
-      ansible.builtin.command: uptime
-      args:
-        ssh_executable: ssh
-        _uses_shell: yes
-      register: uptime_output
+    - name: SSH into EC2 Instance
+      ansible.builtin.shell: ssh -i /var/lib/jenkins/workspace/jenkins-trigger-github/new-key-pem.pem ubuntu@{{ ec2_instance['stdout'] | from_json | json_query('Instances[0].PublicDnsName') }}
+      become: no
+
+    # - name: Run Command on EC2 Instance
+    #   ansible.builtin.command: uptime
+    #   args:
+    #     ssh_executable: ssh
+    #     _uses_shell: yes
+    #   register: uptime_output
 
     - name: Display Uptime Output
       debug:
