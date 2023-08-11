@@ -28,7 +28,7 @@
         host: "{{ ec2_instance['stdout'] | from_json | json_query('Instances[0].PublicDnsName') }}"
         port: 22
         delay: 10
-        timeout: 300
+        timeout: 600
       become: no
 
     - name: Run Command on EC2 Instance
