@@ -35,23 +35,23 @@
         timeout: 300
       with_items: "{{ ec2_instance.instances }}"
       
-    - name: Add instance to known hosts
-      known_hosts:
-        path: "/home/ubuntu/.ssh/known_hosts"
-        name: "{{ item.public_dns_name }}"
-        kekey: "{{ item.ssh_host_key_public }}"
-      with_items: "{{ ec2_instance.instances }}"
-
     - name: Debug instance details
       debug:
         var: item
       loop: "{{ ec2_instance.instances }}"
       
-    - name: Update Jenkins SSH configuration
-      lineinfile:
-        path: /var/lib/jenkins/.ssh/config
-        line: "Host jenkins-ec2-instance\n  HostName {{ item.public_dns_name }}\n  User ec2-user\n  IdentityFile /var/lib/jenkins/.ssh/id_rsa"
-      with_items: "{{ ec2_instance.instances }}"
+    # - name: Add instance to known hosts
+    #   known_hosts:
+    #     path: "/home/ubuntu/.ssh/known_hosts"
+    #     name: "{{ item.public_dns_name }}"
+    #     kekey: "{{ item.ssh_host_key_public }}"
+    #   with_items: "{{ ec2_instance.instances }}"
+      
+    # - name: Update Jenkins SSH configuration
+    #   lineinfile:
+    #     path: /var/lib/jenkins/.ssh/config
+    #     line: "Host jenkins-ec2-instance\n  HostName {{ item.public_dns_name }}\n  User ec2-user\n  IdentityFile /var/lib/jenkins/.ssh/id_rsa"
+    #   with_items: "{{ ec2_instance.instances }}"
 
       
 
