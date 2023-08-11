@@ -22,16 +22,7 @@
     # - name: Debug ec2_instance Variable
     #   debug:
     #     var: ec2_instance
-    - name: Wait for EC2 Instance to Start
-      ansible.builtin.pause:
-        seconds: 10
-      delegate_to: localhost
-      
-    # - name: SSH into EC2 Instance
-    #   ansible.builtin.shell: ssh -i /var/lib/jenkins/workspace/jenkins-trigger-github/new-key-pem.pem ubuntu@{{ ec2_instance.stdout | from_json | json_query('Instances[0].PublicDnsName') }}
-    #   delegate_to: localhost
-    #   become: no
-
+    
     - name: Wait for EC2 Instance to Start
       ansible.builtin.pause:
         seconds: 10
@@ -46,6 +37,10 @@
         timeout: 300
       delegate_to: localhost
       
+    - name: SSH into EC2 Instance
+      ansible.builtin.shell: ssh -i /var/lib/jenkins/workspace/jenkins-trigger-github/new-key-pem.pem ubuntu@{{ ec2_instance.stdout | from_json | json_query('Instances[0].PublicDnsName') }}
+      delegate_to: localhost
+      become: no
 
     # - name: Run Command on EC2 Instance
     #   ansible.builtin.command: uptime
