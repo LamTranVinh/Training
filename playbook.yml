@@ -37,7 +37,7 @@
       delegate_to: localhost
 
    - name: SSH into EC2 Instance
-      ansible.builtin.shell: ssh -i /var/lib/jenkins/workspace/jenkins-trigger-github/new-key-pem.pem ubuntu@{{ ec2_instance['stdout'] | from_json | json_query('Instances[0].PublicDnsName') }}
+      ansible.builtin.shell: ssh -i /var/lib/jenkins/workspace/jenkins-trigger-github/new-key-pem.pem ubuntu@{{ ec2_instance.stdout | from_json | json_query('Instances[0].PublicDnsName') }}
       delegate_to: localhost
       become: no
 
