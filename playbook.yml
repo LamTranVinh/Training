@@ -14,16 +14,16 @@
     
   tasks:
     - name: Create EC2 instance
-      ec2:
+      amazon.aws.ec2_instance:
         region: "{{ region }}"
         instance_type: "{{ instance_type }}"
-        image: "{{ ami_id }}"
+        image_id: "{{ ami_id }}"
         key_name: "{{ keypair_name }}"
-        group: "{{ security_group }}"
+        security_groups: ["{{ security_group }}"]
         subnet_id: "{{ subnet_id }}"
-        wait: yes
+        assign_public_ip: yes
         count: 1
-        instance_tags:
+        tags:
           Name: "Jenkins-Instance"
       register: ec2_instance
 
