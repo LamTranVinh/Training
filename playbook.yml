@@ -26,7 +26,7 @@
     - name: Wait for EC2 Instance to Start
       ansible.builtin.pause:
         seconds: 10
-      delegate_to: localhost
+      delegate_to: server
 
     - name: Wait for SSH Connectivity
       ansible.builtin.wait_for:
@@ -35,11 +35,11 @@
         state: started
         delay: 10
         timeout: 300
-      delegate_to: localhost
+      delegate_to: server
 
     - name: SSH into EC2 Instance
       ansible.builtin.raw: ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/workspace/jenkins-trigger-github/new-key-pem.pem ubuntu@{{ ec2_instance.stdout | from_json | json_query('Instances[0].PublicDnsName') }}
-      delegate_to: localhost
+      delegate_to: server
       become: yes
       
     # - name: SSH into EC2 Instance
