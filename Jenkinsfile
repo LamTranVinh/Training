@@ -18,12 +18,11 @@ pipeline {
             steps {
                 script {
                     def tf = "/usr/local/bin/terraform"
-                   withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "aws-credentials", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-                            ]]) {
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "aws-credentials", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                         sh """
                         ${tf} apply -auto-approve
-                            -var "accessKeyVariable=${aws-credentials}"
-                            -var "secretKeyVariable=${aws-credentials}"
+                            -var "access_key=${AWS_ACCESS_KEY_ID}"
+                            -var "secret_key=${AWS_SECRET_ACCESS_KEY}"
                         """
                     }
                 }
