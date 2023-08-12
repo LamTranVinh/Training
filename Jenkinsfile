@@ -31,39 +31,39 @@ pipeline {
             }
         }
         
-        stage("Build"){
-            options {
-                timeout(time: 10, unit: 'MINUTES')
-            }
-            environment {
-                DOCKER_TAG="${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
-            }
-            steps {
-                sh '''
-                    cd /web-vote-python/
-                    docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} . 
-                    docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest
-                    docker image ls | grep ${DOCKER_IMAGE}'''
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh 'echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin'
-                    sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                    sh "docker push ${DOCKER_IMAGE}:latest"
-                }
-                sh "docker image rm -f ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                sh "docker image rm -f ${DOCKER_IMAGE}:latest"
-            }
-        }
+        // stage("Build"){
+        //     options {
+        //         timeout(time: 10, unit: 'MINUTES')
+        //     }
+        //     environment {
+        //         DOCKER_TAG="${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
+        //     }
+        //     steps {
+        //         sh '''
+        //             cd /web-vote-python/
+        //             docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} . 
+        //             docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest
+        //             docker image ls | grep ${DOCKER_IMAGE}'''
+        //         withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+        //             sh 'echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin'
+        //             sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
+        //             sh "docker push ${DOCKER_IMAGE}:latest"
+        //         }
+        //         sh "docker image rm -f ${DOCKER_IMAGE}:${DOCKER_TAG}"
+        //         sh "docker image rm -f ${DOCKER_IMAGE}:latest"
+        //     }
+        // }
 
-        stage('SSH to EC2') {
-            steps {
-                script {
-                    def instancePublicIp = sh(script: "${tf} output instance_public_ip", returnStdout: true).trim()
-                    def sshKeyPath = "/path/to/your/ssh/key.pem"
+        // stage('SSH to EC2') {
+        //     steps {
+        //         script {
+        //             def instancePublicIp = sh(script: "${tf} output instance_public_ip", returnStdout: true).trim()
+        //             def sshKeyPath = "/path/to/your/ssh/key.pem"
                     
-                    sh "ssh -i ${sshKeyPath} ec2-user@${instancePublicIp}"
-                }
-            }
-        }
+        //             sh "ssh -i ${sshKeyPath} ec2-user@${instancePublicIp}"
+        //         }
+        //     }
+        // }
         // stage("Deploy1") {
         //     options {
         //         timeout(time: 10, unit: 'MINUTES')
