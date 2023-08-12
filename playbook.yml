@@ -1,31 +1,31 @@
 ---
-- name: Create EC2 Instance
-  hosts: server
-  remote_user: ubuntu
-  become: yes
-  gather_facts: false
-  vars:
-    region: "ap-northeast-2"
-    instance_type: "t2.micro"
-    ami_id: "ami-0c9c942bd7bf113a2"
-    keypair_name: "ssh-key-pem-ansible-playbook"
-    security_group: "sg-0afe369c8a18dcd91"
-    subnet_id: "subnet-0397861f148d6e68b"
-  tasks:
-    - name: Create EC2 instance
-      amazon.aws.ec2_instance:
-        region: "{{ region }}"
-        instance_type: "{{ instance_type }}"
-        image_id: "{{ ami_id }}"
-        key_name: "{{ keypair_name }}"
-        security_groups: ["{{ security_group }}"]
-        subnet_id: "{{ subnet_id }}"
-        network:
-          assign_public_ip: yes
-        count: 1
-        tags:
-          Name: "Jenkins-Instance"
-      register: ec2_instance
+# - name: Create EC2 Instance
+#   hosts: server
+#   remote_user: ubuntu
+#   become: yes
+#   gather_facts: false
+#   vars:
+#     region: "ap-northeast-2"
+#     instance_type: "t2.micro"
+#     ami_id: "ami-0c9c942bd7bf113a2"
+#     keypair_name: "ssh-key-pem-ansible-playbook"
+#     security_group: "sg-0afe369c8a18dcd91"
+#     subnet_id: "subnet-0397861f148d6e68b"
+#   tasks:
+#     - name: Create EC2 instance
+#       amazon.aws.ec2_instance:
+#         region: "{{ region }}"
+#         instance_type: "{{ instance_type }}"
+#         image_id: "{{ ami_id }}"
+#         key_name: "{{ keypair_name }}"
+#         security_groups: ["{{ security_group }}"]
+#         subnet_id: "{{ subnet_id }}"
+#         network:
+#           assign_public_ip: yes
+#         count: 1
+#         tags:
+#           Name: "Jenkins-Instance"
+#       register: ec2_instance
     
     # - name: Wait for SSH to be available
     #   wait_for:
@@ -35,12 +35,12 @@
     #     timeout: 300
     #   with_items: "{{ ec2_instance.instances }}"
       
-    - name: Add instance public keys to known hosts
-      known_hosts:
-        path: "~/.ssh/known_hosts"
-        name: "{{ item.public_dns_name }}"
-        key: "{{ item.key_name }}"
-      loop: "{{ ec2_instance.instances }}"
+    # - name: Add instance public keys to known hosts
+    #   known_hosts:
+    #     path: "~/.ssh/known_hosts"
+    #     name: "{{ item.public_dns_name }}"
+    #     key: "{{ item.key_name }}"
+    #   loop: "{{ ec2_instance.instances }}"
     # - name: Debug instance details
     #   debug:
     #     var: item
@@ -129,64 +129,64 @@
 #     #   ansible.builtin.debug:
 #     #     var: ec2_instance.instances
 
-#     # - name: Set Docker Image Environment Variable abc
-#     #   set_fact:
-#     #     docker_image: "tuyetnhung/happy:latest"
-#     # - name: Update apt cache
-#     #   become: yes
-#     #   apt:
-#     #     update_cache: yes
-#     # - name: Install required packages
-#     #   become: yes
-#     #   apt:
-#     #     name: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common']    
-#     # - name: Add Docker GPG key
-#     #   become: yes
-#     #   apt_key:
-#     #     url: https://download.docker.com/linux/ubuntu/gpg
+    - name: Set Docker Image Environment Variable
+      set_fact:
+        docker_image: "tuyetnhung/happy:latest"
+    - name: Update apt cache
+      become: yes
+      apt:
+        update_cache: yes
+    - name: Install required packages
+      become: yes
+      apt:
+        name: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common']    
+    - name: Add Docker GPG key
+      become: yes
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
 
-#     # - name: Add Docker repository
-#     #   become: yes
-#     #   apt_repository:
-#     #     repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu hirsute stable
+    - name: Add Docker repository
+      become: yes
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu hirsute stable
 
-#     # - name: Install Docker
-#     #   become: yes
-#     #   apt:
-#     #     name: docker-ce
-#     #     state: present
+    - name: Install Docker
+      become: yes
+      apt:
+        name: docker-ce
+        state: present
 
-#     # - name: Start and enable Docker service
-#     #   become: yes
-#     #   systemd:
-#     #     name: docker
-#     #     enabled: yes
-#     #     state: started
+    - name: Start and enable Docker service
+      become: yes
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
 
-#     # - name: Install Docker Compose
-#     #   become: yes
-#     #   shell: curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-#     #   args:
-#     #     creates: /usr/local/bin/docker-compose
-#     #   register: docker_compose_result
+    - name: Install Docker Compose
+      become: yes
+      shell: curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+      args:
+        creates: /usr/local/bin/docker-compose
+      register: docker_compose_result
 
-#     # - name: Set Docker Compose permissions
-#     #   become: yes
-#     #   file:
-#     #     path: /usr/local/bin/docker-compose
-#     #     mode: 'u+x,g+x'
+    - name: Set Docker Compose permissions
+      become: yes
+      file:
+        path: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'
 
-#     # - name: Pull Docker Image
-#     #   become: yes
-#     #   command: docker pull {{ docker_image }}
+    - name: Pull Docker Image
+      become: yes
+      command: docker pull {{ docker_image }}
 
-#     # - name: Run a new Docker Container 
-#     #   become: yes
-#     #   shell: docker run -d --name my_nginx_container -p 8080:80 {{ docker_image }}
+    - name: Run a new Docker Container 
+      become: yes
+      shell: docker run -d --name my_nginx_container -p 8080:80 {{ docker_image }}
 
 
 
 
     
-# ...
+...
   
