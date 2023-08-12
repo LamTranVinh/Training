@@ -1,3 +1,7 @@
+output "instance_public_ip" {
+  value = my_instance.public_ip
+}
+
 variable "access_key" {
   description = "AWS access key"
 }
