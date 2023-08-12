@@ -8,13 +8,8 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 script {
-                    def awsCredentials = credentials('aws-credentials') // Use the correct credentials ID
                     def tf = "/usr/local/bin/terraform"
-                    sh """
-                    ${tf} init
-                    AWS_ACCESS_KEY_ID=${awsCredentials.AWSAccessKeyId}
-                    AWS_SECRET_ACCESS_KEY=${awsCredentials.AWSSecretKey}
-                    """
+                    sh "${tf} init"
                 }
             }
         }
@@ -22,13 +17,15 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 script {
-                    def awsCredentials = credentials('aws-credentials') // Use the correct credentials ID
                     def tf = "/usr/local/bin/terraform"
+                   withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "aws-credentials", accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                            ]]) {
                         sh """
                         ${tf} apply -auto-approve
-                            -var "access_key=${awsCredentials.AWSAccessKeyId}"
-                            -var "secret_key=${awsCredentials.AWSSecretKey}"
+                            -var "accessKeyVariable=${aws-credentials}"
+                            -var "secretKeyVariable=${aws-credentials}"
                         """
+                    }
                 }
             }
         }
