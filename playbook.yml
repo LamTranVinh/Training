@@ -1,135 +1,9 @@
 ---
-# - name: Create EC2 Instance
-#   hosts: server
-#   remote_user: ubuntu
-#   become: yes
-#   gather_facts: false
-#   vars:
-#     region: "ap-northeast-2"
-#     instance_type: "t2.micro"
-#     ami_id: "ami-0c9c942bd7bf113a2"
-#     keypair_name: "ssh-key-pem-ansible-playbook"
-#     security_group: "sg-0afe369c8a18dcd91"
-#     subnet_id: "subnet-0397861f148d6e68b"
-#   tasks:
-#     - name: Create EC2 instance
-#       amazon.aws.ec2_instance:
-#         region: "{{ region }}"
-#         instance_type: "{{ instance_type }}"
-#         image_id: "{{ ami_id }}"
-#         key_name: "{{ keypair_name }}"
-#         security_groups: ["{{ security_group }}"]
-#         subnet_id: "{{ subnet_id }}"
-#         network:
-#           assign_public_ip: yes
-#         count: 1
-#         tags:
-#           Name: "Jenkins-Instance"
-#       register: ec2_instance
-    
-    # - name: Wait for SSH to be available
-    #   wait_for:
-    #     host: "{{ item.public_ip_address }}"
-    #     port: 22
-    #     delay: 30
-    #     timeout: 300
-    #   with_items: "{{ ec2_instance.instances }}"
-      
-    # - name: Add instance public keys to known hosts
-    #   known_hosts:
-    #     path: "~/.ssh/known_hosts"
-    #     name: "{{ item.public_dns_name }}"
-    #     key: "{{ item.key_name }}"
-    #   loop: "{{ ec2_instance.instances }}"
-    # - name: Debug instance details
-    #   debug:
-    #     var: item
-    #   loop: "{{ ec2_instance.instances }}"
-      
-    # - name: Add instance to known hosts
-    #   known_hosts:
-    #     path: "~/.ssh/known_hosts"
-    #     name: "{{ item.public_dns_name }}"
-    #     key: "{{ item.key_name }}"
-    #   with_items: "{{ ec2_instance.instances }}"
-    #   when: item.public_ip_address is defined
-      
-    # - name: Update Jenkins SSH configuration
-    #   lineinfile:
-    #     path: /var/lib/jenkins/.ssh/config
-    #     line: "Host jenkins-ec2-instance\n  HostName {{ item.public_dns_name }}\n  User ec2-user\n  IdentityFile /var/lib/jenkins/.ssh/id_rsa"
-    #   with_items: "{{ ec2_instance.instances }}"
-
-      
-
-
-
-
-
-# - name: Create EC2 Instance
-#   hosts: server
-#   remote_user: ubuntu
-#   become: yes
-#   gather_facts: false
-#   tasks:
-#     - name: Create EC2 Instance
-#       command: >
-#         aws ec2 run-instances
-#         --region ap-northeast-2
-#         --key-name ssh-key-pem-ansible-playbook
-#         --instance-type t2.micro
-#         --image-id ami-0c9c942bd7bf113a2
-#         --subnet-id subnet-0397861f148d6e68b
-#         --security-group-ids sg-0afe369c8a18dcd91
-#         --associate-public-ip-address
-#         --count 1
-#         --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=My-new-EC2-Instance}]"
-#       register: ec2_instance
-      
-#     # - name: Debug ec2_instance Variable
-#     #   debug:
-#     #     var: ec2_instance
-    
-#     - name: Wait for EC2 Instance to Start
-#       ansible.builtin.pause:
-#         seconds: 20
-#       delegate_to: localhost
-      
-#     # - name: Wait for SSH Connectivity
-#     #   ansible.builtin.wait_for:
-#     #     host: "{{ ec2_instance.stdout | from_json | json_query('Instances[0].PublicDnsName') }}"
-#     #     port: 22
-#     #     state: present
-#     #     delay: 10
-#     #     timeout: 120
-#     #     # delegate_to: localhost
-  
-#     - name: SSH into EC2 Instance
-#       ansible.builtin.raw: ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/workspace/jenkins-trigger-github/ssh-key-pem-ansible-playbook.pem ubuntu@{{ ec2_instance.stdout | from_json | json_query('Instances[0].PublicDnsName') }}
-#       delegate_to: server
-#       become: yes
-      
-#     # - name: SSH into EC2 Instance
-#     #   ansible.builtin.shell: ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/workspace/jenkins-trigger-github/new-key-pem.pem ubuntu@{{ ec2_instance.stdout | from_json | json_query('Instances[0].PublicDnsName') }}
-#     #   delegate_to: localhost
-#     #   become: yes
-
-#     # - name: Run Command on EC2 Instance
-#     #   ansible.builtin.command: uptime
-#     #   args:
-#     #     ssh_executable: ssh
-#     #     _uses_shell: yes
-#     #   register: uptime_output
-
-#     # - name: Display Uptime Output
-#     #   debug:
-#     #     var: uptime_output.stdout_lines
-        
-#     # - name: Display EC2 Instance Information
-#     #   ansible.builtin.debug:
-#     #     var: ec2_instance.instances
-
-    - name: Set Docker Image Environment Variable
+- hosts: server
+  remote_user: ubuntu
+  become: yes
+  tasks:
+    - name: Set Docker Image Environment Variable abc
       set_fact:
         docker_image: "tuyetnhung/happy:latest"
     - name: Update apt cache
@@ -144,38 +18,32 @@
       become: yes
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
-
     - name: Add Docker repository
       become: yes
       apt_repository:
         repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu hirsute stable
-
     - name: Install Docker
       become: yes
       apt:
         name: docker-ce
         state: present
-
     - name: Start and enable Docker service
       become: yes
       systemd:
         name: docker
         enabled: yes
         state: started
-
     - name: Install Docker Compose
       become: yes
       shell: curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
       args:
         creates: /usr/local/bin/docker-compose
       register: docker_compose_result
-
     - name: Set Docker Compose permissions
       become: yes
       file:
         path: /usr/local/bin/docker-compose
         mode: 'u+x,g+x'
-
     - name: Pull Docker Image
       become: yes
       command: docker pull {{ docker_image }}
@@ -183,13 +51,3 @@
     - name: Run a new Docker Container 
       become: yes
       shell: docker run -d --name my_nginx_container -p 8080:80 {{ docker_image }}
-
-
-
-
-
-
-
-    
-...
-  
