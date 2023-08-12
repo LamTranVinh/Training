@@ -1,5 +1,5 @@
 output "instance_public_ip" {
-  value = my_instance.public_ip
+  value = MyEC2Instance.public_ip
 }
 
 variable "access_key" {
