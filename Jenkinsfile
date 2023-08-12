@@ -25,8 +25,6 @@ pipeline {
                     def tf = "/usr/local/bin/terraform"
                     sh """
                         ${tf} apply -auto-approve
-                            -var "access_key=${AWS_CREDENTIALS}"
-                            -var "secret_key=${AWS_CREDENTIALS}"
                         """
                     }
                 }
