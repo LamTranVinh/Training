@@ -20,8 +20,8 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 script {
-                    def tfHome = tool name: 'Terraform', type: 'ToolInstallation'
-                    def tf = "${tfHome}/bin/terraform"
+                    // def tfHome = tool name: 'Terraform', type: 'ToolInstallation'
+                    def tf = "/usr/local/bin/terraform"
                     
                     withCredentials([string(credentialsId: 'aws-credentials', variable: 'AWS_CREDS')]) {
                         sh """
