@@ -54,16 +54,16 @@ pipeline {
         //     }
         // }
 
-        // stage('SSH to EC2') {
-        //     steps {
-        //         script {
-        //             def instancePublicIp = sh(script: "${tf} output instance_public_ip", returnStdout: true).trim()
-        //             def sshKeyPath = "/path/to/your/ssh/key.pem"
+        stage('SSH to EC2') {
+            steps {
+                script {
+                    def instancePublicIp = sh(script: "${tf} output instance_public_ip", returnStdout: true).trim()
+                    def sshKeyPath = "/path/to/your/ssh/key.pem"
                     
-        //             sh "ssh -i ${sshKeyPath} ec2-user@${instancePublicIp}"
-        //         }
-        //     }
-        // }
+                    sh "ssh -i ${sshKeyPath} ec2-user@${instancePublicIp}"
+                }
+            }
+        }
         // stage("Deploy1") {
         //     options {
         //         timeout(time: 10, unit: 'MINUTES')
