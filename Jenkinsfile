@@ -25,7 +25,6 @@ pipeline {
                         -var "secret_key=\$AWS_SECRET_ACCESS_KEY"
                     """
                     }
-                    def tf = "/usr/local/bin/terraform"
                     def instancePublicIp = sh(
                         script: "${tf} output instance_public_ip",
                         returnStdout: true
