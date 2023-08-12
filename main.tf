@@ -1,3 +1,10 @@
+variable "access_key" {
+  description = "AWS access key"
+}
+
+variable "secret_key" {
+  description = "AWS secret key"
+}
 provider "aws" {
   region = "ap-northeast-2"  # Replace with your desired region
 }
