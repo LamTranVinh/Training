@@ -10,13 +10,12 @@ pipeline {
                 AWS_DEFAULT_REGION = 'ap-northeast-2'
             }
             steps {
-                script {
-                    def tf = "/usr/local/bin/terraform"
-                    def awsCreds = credentials('aws-credentials')
-                    withCredentials([string(credentialsId: awsCreds, variable: 'aws-credentials')]) {
+                withCredentials([string(credentialsId: 'aws-credentials', variable: 'AWS_CREDENTIALS')]) {
+                    script {
+                        def tf = "usr/local/bin/terraform"
                         sh """
-                        export AWS_ACCESS_KEY_ID=${aws-credentials}
-                        export AWS_SECRET_ACCESS_KEY=${aws-credentials}
+                        export AWS_ACCESS_KEY_ID=${AWS_CREDENTIALS}
+                        export AWS_SECRET_ACCESS_KEY=${AWS_CREDENTIALS}
                         ${tf} init
                         """
                     }
@@ -24,17 +23,18 @@ pipeline {
             }
         }
 
+
         stage('Terraform Apply') {
             steps {
                 script {
                     // def tfHome = tool name: 'Terraform', type: 'ToolInstallation'
                     def tf = "/usr/local/bin/terraform"
                     
-                    withCredentials([string(credentialsId: 'aws-credentials', variable: 'aws-credentials')]) {
+                     withCredentials([string(credentialsId: 'aws-credentials', variable: 'AWS_CREDENTIALS')]) {
                         sh """
                         ${tf} apply -auto-approve
-                            -var "access_key=${aws-credentials}"
-                            -var "secret_key=${aws-credentials}"
+                            -var "access_key=${AWS_CREDENTIALS}"
+                            -var "secret_key=${AWS_CREDENTIALS}"
                         """
                     }
                 }
