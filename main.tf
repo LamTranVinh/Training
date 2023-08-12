@@ -19,6 +19,8 @@ resource "aws_instance" "my_instance" {
 
   vpc_security_group_ids = ["sg-0afe369c8a18dcd91"]  # Replace with your security group ID
 
+  associate_public_ip_address = true
+
   subnet_id = "subnet-0397861f148d6e68b"  # Replace with your subnet ID
 
   key_name = "ssh-key-pem-ansible-playbook"  # Replace with your key pair name
