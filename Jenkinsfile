@@ -59,7 +59,7 @@ pipeline {
         //     }
         // }
         
-        stage("Build"){
+        stage("Build and Push"){
             options {
                 timeout(time: 10, unit: 'MINUTES')
             }
@@ -81,7 +81,7 @@ pipeline {
             }
         }
         
-        stage("Deploy1") {
+        stage("Deploy") {
             options {
                 timeout(time: 10, unit: 'MINUTES')
             }
