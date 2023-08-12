@@ -6,29 +6,32 @@ pipeline {
     }
     stages {
         stage('Terraform Init') {
-            environment {
-                AWS_DEFAULT_REGION = 'ap-northeast-2'
-            }
             steps {
                 script {
-                    def tf = "/usr/local/bin/terraform"  // Note the slash before "usr".
+                    def awsCredentials = credentials('aws-credentials') // Use the correct credentials ID
+                    def tf = "/usr/local/bin/terraform"
                     sh """
                     ${tf} init
+                    AWS_ACCESS_KEY_ID=${awsCredentials.USKEY}
+                    AWS_SECRET_ACCESS_KEY=${awsCredentials.SSKEY}
                     """
                 }
             }
         }
 
-        stage('Terraform Apply') {
+        stage('Terraform Init') {
             steps {
                 script {
+                    def awsCredentials = credentials('aws-credentials') // Use the correct credentials ID
                     def tf = "/usr/local/bin/terraform"
-                    sh """
+                        sh """
                         ${tf} apply -auto-approve
+                            -var "access_key=${awsCredentials.USKEY}"
+                            -var "secret_key=${awsCredentials.SSKEY}"
                         """
-                    }
                 }
             }
+        }
         
         stage("Build"){
             options {
