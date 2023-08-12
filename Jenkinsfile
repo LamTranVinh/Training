@@ -19,7 +19,7 @@ pipeline {
             }
         }
 
-        stage('Terraform Init') {
+        stage('Terraform Apply') {
             steps {
                 script {
                     def awsCredentials = credentials('aws-credentials') // Use the correct credentials ID
