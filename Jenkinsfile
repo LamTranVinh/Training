@@ -68,7 +68,6 @@ pipeline {
             }
             steps {
                 sh '''
-                    cd /web-vote-python/
                     docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} . 
                     docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest
                     docker image ls | grep ${DOCKER_IMAGE}'''
