@@ -13,10 +13,10 @@ pipeline {
                 script {
                     def tf = "/usr/local/bin/terraform"
                     def awsCreds = credentials('aws-credentials')
-                    withCredentials([string(credentialsId: awsCreds, variable: 'AWS_CREDS')]) {
+                    withCredentials([string(credentialsId: awsCreds, variable: 'aws-credentials')]) {
                         sh """
-                        export AWS_ACCESS_KEY_ID=${AWS_CREDS}
-                        export AWS_SECRET_ACCESS_KEY=${AWS_CREDS}
+                        export AWS_ACCESS_KEY_ID=${aws-credentials}
+                        export AWS_SECRET_ACCESS_KEY=${aws-credentials}
                         ${tf} init
                         """
                     }
@@ -30,11 +30,11 @@ pipeline {
                     // def tfHome = tool name: 'Terraform', type: 'ToolInstallation'
                     def tf = "/usr/local/bin/terraform"
                     
-                    withCredentials([string(credentialsId: 'aws-credentials', variable: 'AWS_CREDS')]) {
+                    withCredentials([string(credentialsId: 'aws-credentials', variable: 'aws-credentials')]) {
                         sh """
                         ${tf} apply -auto-approve
-                            -var "access_key=${AWS_CREDS}"
-                            -var "secret_key=${AWS_CREDS}"
+                            -var "access_key=${aws-credentials}"
+                            -var "secret_key=${aws-credentials}"
                         """
                     }
                 }
