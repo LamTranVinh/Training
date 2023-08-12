@@ -31,7 +31,6 @@ pipeline {
                     }
                 }
             }
-        }
         
         stage("Build"){
             options {
@@ -79,6 +78,7 @@ pipeline {
             }
         }
 }
+}
     post {
         success {
             echo "SUCCESSFULL"
@@ -87,4 +87,5 @@ pipeline {
             echo "FAILED"
         }
     }
+
 
