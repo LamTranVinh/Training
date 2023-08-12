@@ -11,12 +11,19 @@ pipeline {
             }
             steps {
                 script {
-                    // def tfHome = tool name: 'Terraform', type: 'ToolInstallation'
-                     def tf = "/usr/local/bin/terraform"
-                     sh "${tf} init"
+                    def tf = "/usr/local/bin/terraform"
+                    def awsCreds = credentials('aws-credentials')
+                    withCredentials([string(credentialsId: awsCreds, variable: 'AWS_CREDS')]) {
+                        sh """
+                        export AWS_ACCESS_KEY_ID=${AWS_CREDS}
+                        export AWS_SECRET_ACCESS_KEY=${AWS_CREDS}
+                        ${tf} init
+                        """
+                    }
                 }
             }
         }
+
         stage('Terraform Apply') {
             steps {
                 script {
