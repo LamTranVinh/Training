@@ -11,9 +11,10 @@ pipeline {
             }
             steps {
                 script {
-                    def tfHome = tool name: 'Terraform', type: 'ToolInstallation'
-                    def tf = "${tfHome}/bin/terraform"
-                    sh "${tf} init"
+                    // def tfHome = tool name: 'Terraform', type: 'ToolInstallation'
+                    // def tf = "${tfHome}/bin/terraform"
+                    // sh "${tf} init"
+                    sh /usr/local/bin/terraform
                 }
             }
         }
