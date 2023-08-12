@@ -5,6 +5,35 @@ pipeline {
         DOCKER_IMAGE = "tuyetnhung/happy"
     }
     stages {
+        stage('Terraform Init') {
+            environment {
+                AWS_DEFAULT_REGION = 'ap-northeast-2'
+            }
+            steps {
+                script {
+                    def tfHome = tool name: 'Terraform', type: 'ToolInstallation'
+                    def tf = "${tfHome}/bin/terraform"
+                    sh "${tf} init"
+                }
+            }
+        }
+        stage('Terraform Apply') {
+            steps {
+                script {
+                    def tfHome = tool name: 'Terraform', type: 'ToolInstallation'
+                    def tf = "${tfHome}/bin/terraform"
+                    
+                    withCredentials([string(credentialsId: 'aws-credentials', variable: 'AWS_CREDS')]) {
+                        sh """
+                        ${tf} apply -auto-approve
+                            -var "access_key=${AWS_CREDS}"
+                            -var "secret_key=${AWS_CREDS}"
+                        """
+                    }
+                }
+            }
+        }
+        
         stage("Build"){
             options {
                 timeout(time: 10, unit: 'MINUTES')
