@@ -12,8 +12,8 @@ pipeline {
                     def tf = "/usr/local/bin/terraform"
                     sh """
                     ${tf} init
-                    AWS_ACCESS_KEY_ID=${awsCredentials.USKEY}
-                    AWS_SECRET_ACCESS_KEY=${awsCredentials.SSKEY}
+                    AWS_ACCESS_KEY_ID=${awsCredentials.AWSAccessKeyId}
+                    AWS_SECRET_ACCESS_KEY=${awsCredentials.AWSSecretKey}
                     """
                 }
             }
@@ -26,8 +26,8 @@ pipeline {
                     def tf = "/usr/local/bin/terraform"
                         sh """
                         ${tf} apply -auto-approve
-                            -var "access_key=${awsCredentials.USKEY}"
-                            -var "secret_key=${awsCredentials.SSKEY}"
+                            -var "access_key=${awsCredentials.AWSAccessKeyId}"
+                            -var "secret_key=${awsCredentials.AWSSecretKey}"
                         """
                 }
             }
