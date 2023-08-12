@@ -37,15 +37,15 @@ pipeline {
             }
         }
 
-        // stage('Update Inventory') {
-        //     steps {
-        //         script {
-        //             def tf = "/usr/local/bin/terraform"
-        //             def instancePublicIp = sh(script: "${tf} output instance_public_ip", returnStdout: true).trim()
-        //             writeFile file: '/var/lib/jenkins/workspace/jenkins-trigger-github/hosts', text: "new_instance ansible_host=${instancePublicIp} ansible_user=ubuntu ansible_ssh_extra_args='-o StrictHostKeyChecking=no' private-key=ssh-key-pem-ansible-playbook.pem"
-        //         }
-        //     }
-        // }
+        stage('Update Inventory') {
+            steps {
+                script {
+                    def tf = "/usr/local/bin/terraform"
+                    def instancePublicIp = sh(script: "${tf} output instance_public_ip", returnStdout: true).trim()
+                    writeFile file: '/var/lib/jenkins/workspace/jenkins-trigger-github/hosts', text: "new_instance ansible_host=${instancePublicIp} ansible_user=ubuntu ansible_ssh_extra_args='-o StrictHostKeyChecking=no' private-key=ssh-key-pem-ansible-playbook.pem"
+                }
+            }
+        }
 
         // stage('SSH to EC2') {
         //     steps {
