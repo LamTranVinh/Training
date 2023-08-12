@@ -40,6 +40,18 @@ pipeline {
                 }
             }
         }
+
+        stage('SSH to EC2') {
+            steps {
+                script {
+                     def tf = "/usr/local/bin/terraform"
+                    def instancePublicIp = sh(script: "${tf} output instance_public_ip", returnStdout: true).trim()
+                    def sshKeyPath = "/var/lib/jenkins/workspace/jenkins-trigger-github/ssh-key-pem-ansible-playbook.pem"
+                    
+                    sh "ssh -i ${sshKeyPath} ec2-user@${instancePublicIp}"
+                }
+            }
+        }
         
         // stage("Build"){
         //     options {
