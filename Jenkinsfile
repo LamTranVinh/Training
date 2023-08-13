@@ -37,7 +37,7 @@ pipeline {
             }
         }
 
-        stage('Update Inventory') {
+        stage('Update Inventory and SSH') {
             steps {
                 script {
                     def tf = "/usr/local/bin/terraform"
